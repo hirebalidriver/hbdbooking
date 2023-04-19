@@ -22,9 +22,7 @@ onMounted(() => {
       <stepper-view></stepper-view>
     </div>
     <div>
-      <div
-        class="w-full p-6 bg-white border border-gray-200 rounded-lg shadow-lg"
-      >
+      <div>
         <Nuxt />
       </div>
     </div>
