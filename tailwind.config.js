@@ -7,11 +7,19 @@ module.exports = {
     "./plugins/**/*.{js,ts}",
     "./nuxt.config.{js,ts}",
     "./app.vue",
-    "./node_modules/flowbite.{js,ts}",
   ],
   theme: {
     extend: {},
   },
-  darkMode: "class",
-  plugins: [require("flowbite")],
+  plugins: [require("daisyui")],
+  daisyui: {
+    styled: true,
+    themes: true,
+    base: true,
+    utils: true,
+    logs: true,
+    rtl: false,
+    prefix: "",
+    darkTheme: "light",
+  },
 };
