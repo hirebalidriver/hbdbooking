@@ -18,6 +18,7 @@
         <div class="stat-title">2 Adults</div>
         <div class="stat-title">Bali Hotel</div>
         <div class="stat-actions">
+          <button class="btn btn-sm">Detail</button>
           <button class="btn btn-sm">Sent to email</button>
           <button class="btn btn-sm">Contact Us</button>
         </div>
