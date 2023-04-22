@@ -23,6 +23,6 @@
   "devDependencies": {
     "@nuxtjs/dotenv": "^1.4.1",
     "@nuxtjs/tailwindcss": "^5.3.3",
-    "postcss": "^8.4.22"
+    "postcss": "^8.4.23"
   }
 }
