@@ -27,10 +27,11 @@ export default {
   buildModules: [
     // https://go.nuxtjs.dev/tailwindcss
     "@nuxtjs/tailwindcss",
+    "@nuxtjs/moment",
   ],
 
   // Modules: https://go.nuxtjs.dev/config-modules
-  modules: [],
+  modules: ["@nuxtjs/axios"],
 
   // Build Configuration: https://go.nuxtjs.dev/config-build
   build: {
@@ -40,5 +41,10 @@ export default {
         autoprefixer: {},
       },
     },
+  },
+
+  axios: {
+    // proxy: true
+    baseURL: process.env.NUXT_BASE_URL,
   },
 };
