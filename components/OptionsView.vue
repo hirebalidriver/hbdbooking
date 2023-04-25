@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div id="options">
     <div class="w-full border shadow-xl card bg-base-100">
       <div class="grid grid-cols-1 md:grid-cols-3">
         <div class="col-span-2 px-6 py-6 border-b-2 md:border-r-2">
@@ -7,8 +7,13 @@
           <p>Inclusions</p>
           <div class="flex gap-2 mb-3" v-html="inclusions"></div>
           <div class="flex flex-row gap-3">
-            <button class="btn btn-sm btn-outline">7:30 AM</button>
-            <button class="btn btn-sm btn-outline">8:30 AM</button>
+            <button
+              class="btn btn-sm btn-outline"
+              v-for="(item, index) in times"
+              :key="index"
+            >
+              {{ item.time | timeFormat }}
+            </button>
           </div>
         </div>
         <div class="w-full px-6 py-6 text-right border-b-2">
@@ -55,15 +60,24 @@
 
 <script>
 import { mapGetters } from "vuex";
+import moment from "moment";
 
 export default {
-  props: ["title", "prices", "inclusions"],
+  props: ["title", "prices", "inclusions", "times"],
 
   data: () => ({
     total: 0,
     totalAdult: 0,
     totalChild: 0,
   }),
+
+  filters: {
+    timeFormat: function (value) {
+      if (!value) return "";
+      value = moment(value, "HH:mm");
+      return value.format("HH:mm");
+    },
+  },
 
   mounted() {
     this.getTotal();

@@ -9,7 +9,7 @@
       <figure class="max-w-[500px]" v-else>
         <div class="w-full rounded-md">
           <div class="space-x-4 animate-pulse">
-            <div class="w-56 h-56 bg-slate-200"></div>
+            <div class="w-full h-56 md:w-56 bg-slate-200"></div>
           </div>
         </div>
       </figure>

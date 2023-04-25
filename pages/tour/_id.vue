@@ -23,6 +23,7 @@
         :title="item.title"
         :inclusions="item.inclusions"
         :prices="item.prices"
+        :times="item.times"
         :adult="adult"
         :child="child"
       />
