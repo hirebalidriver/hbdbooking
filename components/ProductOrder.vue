@@ -4,7 +4,10 @@
       class="bg-white border border-gray-200 rounded-lg shadow-lg card lg:card-side"
     >
       <figure class="max-w-[500px]" v-if="tour.thumb">
-        <!-- <img src="'aws'+${{tour.thumb}}" alt="Album" /> -->
+        <img
+          :src="'https://hbds3.s3.ap-southeast-1.amazonaws.com' + tour.thumb"
+          alt="Hire Bali Driver"
+        />
       </figure>
       <figure class="max-w-[500px]" v-else>
         <div class="w-full rounded-md">
