@@ -2,31 +2,17 @@
   <div>
     <div class="grid grid-cols-1 mt-5 md:gap-4 md:grid-cols-3">
       <div class="col-span-2">
-        <contact-detail class="mb-4" />
-        <payment-select />
-        <div class="flex gap-2 mt-8">
-          <input type="checkbox" checked="checked" class="checkbox" />
-          <p>
-            I have read and agree to the website
-            <nuxt-link class="text-orange-700" to="https://hirebalidriver.com"
-              >terms and conditions hirebalidriver.com</nuxt-link
-            >
-          </p>
-        </div>
-        <div class="mt-4">
-          <nuxt-link
-            to="/success"
-            class="w-full bg-green-700 border-none btn hover:bg-green-900"
-          >
-            Place Order
-          </nuxt-link>
-        </div>
+        <contact-detail class="mb-4" :wishlist="wishtlist.id" />
       </div>
       <div class="w-full mt-4 md:mt-0">
         <product-payment
           :tour="wishtlist.tour"
           :adult="wishtlist.adult"
           :child="wishtlist.child"
+          :priceAdult="pricesAdult"
+          :priceChild="pricesChild"
+          :date="wishtlist.date"
+          :time="wishtlist.time"
         ></product-payment>
       </div>
     </div>
@@ -48,8 +34,26 @@ export default {
   //   return {};
   // },
 
+  created() {
+    this.getWishlist();
+  },
+
   computed: {
-    ...mapGetters({ wishtlist: "wishlist/wishlist" }),
+    ...mapGetters({
+      wishtlist: "wishlist/wishlist",
+      pricesAdult: "wishlist/pricesAdult",
+      pricesChild: "wishlist/pricesChild",
+    }),
+  },
+
+  methods: {
+    async getWishlist() {
+      let formData = {
+        id: this.$route.params.id,
+      };
+      await this.$store.dispatch("wishlist/detail", formData);
+      this.$store.dispatch("general/setMenu", 2);
+    },
   },
 };
 </script>

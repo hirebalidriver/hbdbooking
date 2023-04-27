@@ -37,6 +37,9 @@ export const mutations = {
   SET_CHILD(state, value) {
     state.child = value;
   },
+  SET_DATE(state, value) {
+    state.date = value;
+  },
 };
 
 export const actions = {
@@ -64,9 +67,9 @@ export const actions = {
   },
 
   setPeople({ commit }, credetials) {
-    console.log(credetials.adult);
     commit("SET_ADULT", credetials.adult);
     commit("SET_CHILD", credetials.child);
+    commit("SET_DATE", credetials.date);
   },
 };
 

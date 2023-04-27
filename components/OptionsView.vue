@@ -7,13 +7,22 @@
           <p>Inclusions</p>
           <div class="flex gap-2 mb-3" v-html="inclusions"></div>
           <div class="flex flex-row gap-3">
-            <button
-              class="btn btn-sm btn-outline"
-              v-for="(item, index) in times"
-              :key="index"
-            >
-              {{ item.time | timeFormat }}
-            </button>
+            <span v-for="(item, index) in times" :key="index">
+              <button
+                v-if="item.id == sTime"
+                class="btn btn-sm"
+                @click="selectTime(item.id)"
+              >
+                {{ item.time | timeFormat }}
+              </button>
+              <button
+                v-else
+                class="btn btn-sm btn-outline"
+                @click="selectTime(item.id)"
+              >
+                {{ item.time | timeFormat }}
+              </button>
+            </span>
           </div>
         </div>
         <div class="w-full px-6 py-6 text-right border-b-2">
@@ -40,12 +49,12 @@
               <p>{{ child }} child x USD {{ item.price }}</p>
             </div>
           </div>
-          <button class="w-full mb-2 btn btn-outline">
+          <button class="w-full mb-2 btn btn-outline" @click="orderNow()">
             Reserve Now &amp; Pay Later
           </button>
-          <nuxt-link class="w-full bg-green-700 btn" to="/payment"
-            >Book Now</nuxt-link
-          >
+          <button class="w-full bg-green-700 btn" @click="orderNow()">
+            Book Now
+          </button>
         </div>
       </div>
       <div class="px-6 py-5">
@@ -63,12 +72,14 @@ import { mapGetters } from "vuex";
 import moment from "moment";
 
 export default {
-  props: ["title", "prices", "inclusions", "times"],
+  props: ["title", "prices", "inclusions", "times", "optionID", "tourID"],
 
   data: () => ({
     total: 0,
     totalAdult: 0,
     totalChild: 0,
+    sTime: null,
+    timeStatus: false,
   }),
 
   filters: {
@@ -84,7 +95,12 @@ export default {
   },
 
   computed: {
-    ...mapGetters({ adult: "tour/adult", child: "tour/child" }),
+    ...mapGetters({
+      adult: "tour/adult",
+      child: "tour/child",
+      date: "tour/date",
+      id: "wishlist/id",
+    }),
   },
 
   methods: {
@@ -110,6 +126,41 @@ export default {
       });
 
       this.total = this.totalAdult + this.totalChild;
+    },
+
+    selectTime(value) {
+      this.sTime = value;
+      this.timeStatus = true;
+      console.log("select time", this.sTime);
+    },
+
+    setAlert(value) {
+      let formData = {
+        alert: true,
+        messageAlert: value,
+      };
+      this.$store.dispatch("general/setAlert", formData);
+    },
+
+    async orderNow() {
+      console.log("CLICKED");
+
+      if (this.timeStatus) {
+        let formData = {
+          package_id: Number(this.tourID),
+          tour_id: Number(this.optionID),
+          time_id: this.sTime,
+          date: moment(this.date).format("YYYY-DD-MM"),
+          adult: Number(this.adult),
+          child: Number(this.child),
+        };
+
+        await this.$store.dispatch("wishlist/add", formData);
+
+        this.$router.push("/payment/" + this.id);
+      } else {
+        this.setAlert("Please, Select the time");
+      }
     },
   },
 };
