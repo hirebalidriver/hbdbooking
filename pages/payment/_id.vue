@@ -2,7 +2,12 @@
   <div>
     <div class="grid grid-cols-1 mt-5 md:gap-4 md:grid-cols-3">
       <div class="col-span-2">
-        <contact-detail class="mb-4" :wishlist="wishtlist.id" />
+        <contact-detail
+          class="mb-4"
+          :wishlist="wishtlist"
+          :priceAdult="pricesAdult"
+          :priceChild="pricesChild"
+        />
       </div>
       <div class="w-full mt-4 md:mt-0">
         <product-payment
@@ -31,7 +36,8 @@ export default {
   layout: "default",
 
   // data() {
-  //   return {};
+  //   return {
+  //   };
   // },
 
   created() {

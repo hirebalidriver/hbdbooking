@@ -26,7 +26,7 @@
           </div>
         </div>
         <div class="w-full px-6 py-6 text-right border-b-2">
-          <h3 class="text-lg font-bold">USD {{ total }}</h3>
+          <h3 class="text-lg font-bold">USD {{ getTot }}</h3>
           <div class="mb-3" v-for="(item, index) in prices" :key="index">
             <div
               v-if="
@@ -35,7 +35,9 @@
                 item.people_end >= adult
               "
             >
-              <p>{{ adult }} adult x USD {{ item.price }}</p>
+              <p>
+                {{ adult }} adult x USD {{ item.price }} = USD {{ totalAdult }}
+              </p>
             </div>
           </div>
           <div class="mb-3" v-for="(item, index) in prices" :key="index">
@@ -46,7 +48,9 @@
                 item.people_end >= child
               "
             >
-              <p>{{ child }} child x USD {{ item.price }}</p>
+              <p>
+                {{ child }} child x USD {{ item.price }} = USD {{ totalChild }}
+              </p>
             </div>
           </div>
           <button class="w-full mb-2 btn btn-outline" @click="orderNow()">
@@ -75,7 +79,6 @@ export default {
   props: ["title", "prices", "inclusions", "times", "optionID", "tourID"],
 
   data: () => ({
-    total: 0,
     totalAdult: 0,
     totalChild: 0,
     sTime: null,
@@ -99,8 +102,38 @@ export default {
       adult: "tour/adult",
       child: "tour/child",
       date: "tour/date",
+      total: "tour/total",
       id: "wishlist/id",
     }),
+
+    getTot() {
+      this.prices.forEach((value, index) => {
+        if (
+          value.type == 1 &&
+          value.people <= this.adult &&
+          value.people_end >= this.adult
+        ) {
+          this.totalAdult = this.adult * value.price;
+        }
+      });
+
+      this.prices.forEach((value, index) => {
+        if (
+          value.type == 2 &&
+          value.people <= this.child &&
+          value.people_end >= this.child
+        ) {
+          this.totalChild = this.child * value.price;
+        }
+      });
+
+      let formData = {
+        total: this.totalAdult + this.totalChild,
+      };
+      this.$store.dispatch("tour/setTotal", formData);
+
+      return parseInt(this.totalAdult) + parseInt(this.totalChild);
+    },
   },
 
   methods: {
@@ -125,7 +158,10 @@ export default {
         }
       });
 
-      this.total = this.totalAdult + this.totalChild;
+      let formData = {
+        total: this.totalAdult + this.totalChild,
+      };
+      this.$store.dispatch("tour/setTotal", formData);
     },
 
     selectTime(value) {

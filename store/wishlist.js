@@ -81,6 +81,7 @@ export const actions = {
       let res = await this.$axios.$get("/api/front/wishlist/booking", {
         params: credetials,
       });
+      console.log(res.data);
       commit("SET_BOOKING_ID", res.data);
     } catch (e) {
       console.log("error", e);

@@ -4,10 +4,10 @@
       <div class="bg-white border border-gray-200 rounded-lg shadow-lg">
         <div class="card-body">
           <h1 class="mb-4 text-lg font-bold">1. Contact details</h1>
-          <div class="grid grid-cols-2 gap-3">
+          <div class="grid grid-cols-2 gap-3" v-if="detailOpen">
             <div class="mb-3">
               <label class="block mb-2 text-sm font-medium text-gray-900"
-                >First name</label
+                >First name *</label
               >
               <input
                 label="First name"
@@ -20,7 +20,7 @@
             </div>
             <div class="mb-3">
               <label class="block mb-2 text-sm font-medium text-gray-900"
-                >Last name</label
+                >Last name *</label
               >
               <input
                 label="Last name"
@@ -33,7 +33,7 @@
             </div>
             <div class="mb-3">
               <label class="block mb-2 text-sm font-medium text-gray-900"
-                >Email</label
+                >Email *</label
               >
               <input
                 label="Email address"
@@ -46,7 +46,7 @@
             </div>
             <div class="mb-3">
               <label class="block mb-2 text-sm font-medium text-gray-900"
-                >Phone number</label
+                >Phone number *</label
               >
               <input
                 label="Phone number"
@@ -59,7 +59,7 @@
             </div>
             <div class="mb-3">
               <label class="block mb-2 text-sm font-medium text-gray-900"
-                >Address</label
+                >Address *</label
               >
               <input
                 label="Address"
@@ -78,7 +78,7 @@
           /> -->
             <div class="mb-3">
               <label class="block mb-2 text-sm font-medium text-gray-900"
-                >Country</label
+                >Country *</label
               >
               <select
                 class="w-full select select-bordered"
@@ -111,7 +111,6 @@
                 placeholder="Hotel"
                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
                 v-model="form.hotel"
-                required
               />
             </div>
             <div class="mb-3">
@@ -124,7 +123,6 @@
                 placeholder="Hotel address"
                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
                 v-model="form.hotel_address"
-                required
               />
             </div>
             <div class="col-span-2 mb-3">
@@ -137,14 +135,53 @@
                 v-model="form.note"
               ></textarea>
             </div>
+            <div class="col-span-2 mb-3">
+              <a class="bg-blue-700 btn" @click="getNext()">NEXT</a>
+            </div>
+          </div>
+
+          <div v-else>
+            <p class="mb-3 font-bold">{{ form.fname }} {{ form.lname }}</p>
+            <p class="mb-2">Email : {{ form.email }}</p>
+            <p class="mb-4">Phone : {{ form.phone }}</p>
+            <a class="btn-outline btn-sm btn" @click="updateDetail()">Edit</a>
           </div>
         </div>
       </div>
 
-      <div class="mt-4 bg-white border border-gray-200 rounded-lg shadow-lg">
+      <div
+        class="mt-4 bg-white border border-gray-200 rounded-lg shadow-lg"
+        id="payment"
+      >
         <div class="card-body">
           <h1 class="mb-4 text-lg font-bold">2. Payment</h1>
-          <div>
+          <div class="w-full md:w-2/3" v-if="paymentOpen">
+            <div class="mb-3">
+              <p class="py-2 font-bold text-left">
+                Pay Later: Pay with cash on meeting.
+              </p>
+              <a
+                class="block w-full p-2 text-center bg-orange-600 border border-orange-600 rounded-md hover:cursor-pointer hover:bg-orange-700"
+                v-if="form.payment === 0"
+                @click="payLater()"
+              >
+                <p class="text-lg font-bold text-white">Pay Later</p>
+              </a>
+              <a
+                class="block w-full p-2 text-center bg-orange-700 border border-orange-900 rounded-md hover:cursor-pointer"
+                v-if="form.payment === 1"
+                @click="payLater()"
+              >
+                <span class="text-lg font-bold text-white">Pay Later</span>
+              </a>
+            </div>
+            <p class="py-2 font-bold text-left">
+              Pay via PayPal: you can pay with your credit card if you dont have
+              a PayPal account.
+            </p>
+            <div ref="paypal"></div>
+          </div>
+          <!-- <div>
             <div class="mb-5 form-control">
               <label class="flex justify-start gap-2 mb-2">
                 <input
@@ -176,7 +213,7 @@
               </label>
               <p class="ml-8">Pay with cash on meeting.</p>
             </div>
-          </div>
+          </div> -->
         </div>
       </div>
 
@@ -197,8 +234,16 @@
       </div>
       <div class="mt-4">
         <button
+          v-if="detailOpen === false && form.payment"
           type="submit"
           class="w-full bg-green-700 border-none btn hover:bg-green-900"
+        >
+          Place Order
+        </button>
+        <button
+          v-else
+          disabled="disabled"
+          class="w-full bg-gray-200 border-none btn"
         >
           Place Order
         </button>
@@ -213,7 +258,7 @@ import CountryJson from "@/static/country.json";
 import { mapGetters } from "vuex";
 
 export default {
-  props: ["wishlist"],
+  props: ["wishlist", "priceAdult", "priceChild"],
   components: { InputText },
   data() {
     return {
@@ -230,27 +275,156 @@ export default {
         hotel: "",
         hotel_address: "",
         note: "",
-        payment: 1,
+        payment: 0,
+        paypalEmail: "",
       },
       checkAgree: false,
+      isPaymentAmountModalVisible: false,
+      total: 0,
+      paymentOpen: false,
+      detailOpen: true,
     };
   },
 
-  computed: {
-    ...mapGetters({ bookingId: "wishlist/bookingId" }),
+  created() {
+    this.setStart();
+    this.getTotal();
   },
 
+  computed: {
+    ...mapGetters({
+      bookingId: "wishlist/bookingId",
+    }),
+  },
+
+  // mounted: function () {
+  //   const script = document.createElement("script");
+  //   script.src =
+  //     "https://www.paypal.com/sdk/js?client-id=AWYqwZP_0zlnYZm38Lz7ZkaPUbfyCS5_2ryOkE89UrAiq3KrO6rsrRmIXDfmvLanv290iZwk56tcUgKE";
+  //   script.addEventListener("load", this.setLoaded);
+  //   document.body.appendChild(script);
+  // },
+
   methods: {
+    getTotal() {
+      let priceAdult = this.wishlist?.adult * this.priceAdult?.price;
+      let priceChild = this.wishlist?.child * this.priceChild?.price;
+      let total = priceAdult + priceChild;
+      this.total = total;
+      console.log("total: ", this.total);
+    },
+
+    setStart() {
+      this.form.wishlist_id = this.wishlist.id;
+    },
+
     async bookingTour() {
-      this.form.wishlist_id = this.wishlist;
-      // console.log(this.form);
+      this.form.wishlist_id = this.wishlist.id;
       if (this.checkAgree) {
         await this.$store.dispatch("wishlist/booking", this.form);
         this.$router.push("/success/" + this.bookingId);
       } else {
-        console.log("must checked");
+        console.log("Must checked our terms and conditions.");
       }
     },
+
+    payLater() {
+      if (this.form.payment === 0) {
+        this.form.payment = 1;
+      } else {
+        this.form.payment = 0;
+      }
+
+      console.log(this.form.payment);
+    },
+
+    getNext() {
+      if (!this.form.fname) {
+        let msg = { alert: true, messageAlert: "First name required" };
+        this.$store.dispatch("general/setAlert", msg);
+      } else if (!this.form.lname) {
+        let msg = { alert: true, messageAlert: "Last name required" };
+        this.$store.dispatch("general/setAlert", msg);
+      } else if (!this.form.email) {
+        let msg = { alert: true, messageAlert: "Email required" };
+        this.$store.dispatch("general/setAlert", msg);
+      } else if (!this.form.phone) {
+        let msg = { alert: true, messageAlert: "Phone required" };
+        this.$store.dispatch("general/setAlert", msg);
+      } else if (!this.form.address) {
+        let msg = { alert: true, messageAlert: "Address required" };
+        this.$store.dispatch("general/setAlert", msg);
+      } else if (!this.form.country) {
+        let msg = { alert: true, messageAlert: "Country required" };
+        this.$store.dispatch("general/setAlert", msg);
+      } else {
+        this.paymentOpen = true;
+        this.detailOpen = false;
+        window.scrollTo({
+          top: document.getElementById("payment").offsetTop,
+          left: 0,
+          behavior: "smooth",
+        });
+
+        const script = document.createElement("script");
+        script.src =
+          "https://www.paypal.com/sdk/js?client-id=AWYqwZP_0zlnYZm38Lz7ZkaPUbfyCS5_2ryOkE89UrAiq3KrO6rsrRmIXDfmvLanv290iZwk56tcUgKE";
+        script.addEventListener("load", this.setLoaded);
+        document.body.appendChild(script);
+      }
+    },
+
+    updateDetail() {
+      this.detailOpen = true;
+      this.paymentOpen = false;
+    },
+
+    // PAYPAL
+    openPaymentAmountModal() {
+      this.isPaymentAmountModalVisible = true;
+    },
+    closePaymentAmountModal() {
+      this.isPaymentAmountModalVisible = false;
+    },
+    setLoaded: function () {
+      window.paypal
+        .Buttons({
+          style: {
+            layout: "vertical",
+            color: "blue",
+            shape: "rect",
+            label: "paypal",
+          },
+          createOrder: (data, actions) => {
+            this.checkAgree = true;
+            return actions.order.create({
+              purchase_units: [
+                {
+                  amount: {
+                    value: this.total,
+                  },
+                },
+              ],
+            });
+          },
+          onApprove: async (data, actions) => {
+            const orderPaypal = await actions.order.capture();
+            this.form.payment = 0;
+            this.checkAgree = true;
+            await this.$store.dispatch("wishlist/booking", this.form);
+            this.$router.push("/success/" + this.bookingId);
+          },
+          onCancel: async (data, actions) => {
+            // this.checkAgree = true;
+            // this.form.payment = 1;
+            console.log("cancel");
+            // await this.$store.dispatch("wishlist/booking", this.form);
+            // this.$router.push("/success/" + this.bookingId);
+          },
+        })
+        .render(this.$refs.paypal);
+    },
+    // END PAYPAL
   },
 };
 </script>

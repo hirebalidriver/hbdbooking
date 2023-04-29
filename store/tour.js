@@ -3,6 +3,7 @@ export const state = () => ({
   options: [],
   adult: 0,
   child: 0,
+  total: 0,
   date: null,
 });
 
@@ -18,6 +19,9 @@ export const getters = {
   },
   child(state) {
     return state.child;
+  },
+  total(state) {
+    return state.total;
   },
   date(state) {
     return state.date;
@@ -39,6 +43,9 @@ export const mutations = {
   },
   SET_DATE(state, value) {
     state.date = value;
+  },
+  SET_TOTAL(state, value) {
+    state.total = value;
   },
 };
 
@@ -70,6 +77,10 @@ export const actions = {
     commit("SET_ADULT", credetials.adult);
     commit("SET_CHILD", credetials.child);
     commit("SET_DATE", credetials.date);
+  },
+
+  setTotal({ commit }, credetials) {
+    commit("SET_TOTAL", credetials.total);
   },
 };
 
