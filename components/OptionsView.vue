@@ -53,12 +53,22 @@
               </p>
             </div>
           </div>
-          <button class="w-full mb-2 btn btn-outline" @click="orderNow()">
-            Reserve Now &amp; Pay Later
-          </button>
-          <button class="w-full bg-green-700 btn" @click="orderNow()">
-            Book Now
-          </button>
+          <div v-if="bookButton">
+            <button class="w-full mb-2 btn btn-outline" @click="orderNow()">
+              Reserve Now &amp; Pay Later
+            </button>
+            <button class="w-full bg-green-700 btn" @click="orderNow()">
+              Book Now
+            </button>
+          </div>
+          <div v-else>
+            <button class="w-full mb-2 btn btn-outline" disabled="disabled">
+              Reserve Now &amp; Pay Later
+            </button>
+            <button class="w-full bg-green-700 btn" disabled="disabled">
+              Book Now
+            </button>
+          </div>
         </div>
       </div>
       <div class="px-6 py-5">
@@ -83,6 +93,7 @@ export default {
     totalChild: 0,
     sTime: null,
     timeStatus: false,
+    bookButton: false,
   }),
 
   filters: {
@@ -166,6 +177,7 @@ export default {
 
     selectTime(value) {
       this.sTime = value;
+      this.bookButton = true;
       this.timeStatus = true;
       console.log("select time", this.sTime);
     },

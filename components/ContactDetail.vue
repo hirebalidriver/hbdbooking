@@ -366,6 +366,10 @@ export default {
           behavior: "smooth",
         });
 
+        this.form.wishlist_id = this.wishlist.id;
+
+        this.getTotal();
+
         const script = document.createElement("script");
         script.src =
           "https://www.paypal.com/sdk/js?client-id=AWYqwZP_0zlnYZm38Lz7ZkaPUbfyCS5_2ryOkE89UrAiq3KrO6rsrRmIXDfmvLanv290iZwk56tcUgKE";
