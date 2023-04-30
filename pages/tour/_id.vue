@@ -71,9 +71,9 @@ export default {
     setDefault() {
       this.date = this.$route.query.date;
       this.tourId = this.$route.query.tour;
-      this.adult = this.$route.query.adult;
-      this.child = this.$route.query.child;
-      console.log("date", this.date);
+      this.adult = this.$route.query.adult_number;
+      this.child = this.$route.query.child_number;
+      // console.log("date", this.date);
     },
 
     async getTour() {
