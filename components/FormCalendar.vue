@@ -9,7 +9,7 @@
           type="date"
           id="date"
           v-model="dob"
-          class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 w-full"
+          class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
           required
         />
       </div>
@@ -102,3 +102,17 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+input[type="date"] {
+  display: block;
+
+  /* Solution 1 */
+  /* -webkit-appearance: textfield;
+  -moz-appearance: textfield;
+  min-height: 1.2em; */
+
+  /* Solution 2 */
+  min-width: 96%;
+}
+</style>
