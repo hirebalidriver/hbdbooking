@@ -45,7 +45,7 @@ export default {
   filters: {
     dateFormat: function (value) {
       if (!value) return "";
-      value = moment(value, "YYYY-DD-MM");
+      value = moment(value, "YYYY-MM-DD");
       return value.format("ll");
     },
 
