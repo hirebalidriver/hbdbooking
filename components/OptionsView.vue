@@ -54,19 +54,22 @@
             </div>
           </div>
           <div v-if="bookButton">
-            <button class="w-full mb-2 btn btn-outline" @click="orderNow()">
-              Reserve Now &amp; Pay Later
-            </button>
-            <button class="w-full bg-green-700 btn" @click="orderNow()">
+            <button class="w-full bg-green-700 btn" @click="orderNow('now')">
               Book Now
+            </button>
+            <button
+              class="w-full mt-2 btn btn-outline"
+              @click="orderNow('later')"
+            >
+              Pay Later
             </button>
           </div>
           <div v-else>
-            <button class="w-full mb-2 btn btn-outline" disabled="disabled">
-              Reserve Now &amp; Pay Later
-            </button>
             <button class="w-full bg-green-700 btn" disabled="disabled">
               Book Now
+            </button>
+            <button class="w-full mt-2 btn btn-outline" disabled="disabled">
+              Pay Later
             </button>
           </div>
         </div>
@@ -190,7 +193,7 @@ export default {
       this.$store.dispatch("general/setAlert", formData);
     },
 
-    async orderNow() {
+    async orderNow(item) {
       console.log("CLICKED");
 
       if (this.timeStatus) {
@@ -205,7 +208,7 @@ export default {
 
         await this.$store.dispatch("wishlist/add", formData);
 
-        this.$router.push("/payment/" + this.id);
+        this.$router.push("/payment/" + this.id + "?pay=" + item);
       } else {
         this.setAlert("Please, Select the time");
       }

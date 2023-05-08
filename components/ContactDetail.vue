@@ -155,50 +155,7 @@
       >
         <div class="card-body">
           <h1 class="mb-4 text-lg font-bold">2. Payment</h1>
-          <div class="w-full md:w-2/3" v-if="paymentOpen">
-            <div class="mb-3">
-              <p class="py-2 font-bold text-left">
-                Pay Later: Pay with cash on meeting.
-              </p>
-              <a
-                class="block w-full p-2 text-center bg-orange-600 border border-orange-600 rounded-md hover:cursor-pointer hover:bg-orange-700"
-                v-if="form.payment === 0"
-                @click="payLater()"
-              >
-                <p class="text-lg font-bold text-white">Pay Later</p>
-              </a>
-              <a
-                class="block w-full p-2 text-center bg-orange-700 border border-orange-900 rounded-md hover:cursor-pointer"
-                v-if="form.payment === 1"
-                @click="payLater()"
-              >
-                <span class="text-lg font-bold text-white">Pay Later</span>
-              </a>
-            </div>
-            <p class="py-2 font-bold text-left">
-              Pay via PayPal: you can pay with your credit card if you dont have
-              a PayPal account.
-            </p>
-            <div ref="paypal"></div>
-          </div>
-          <!-- <div>
-            <div class="mb-5 form-control">
-              <label class="flex justify-start gap-2 mb-2">
-                <input
-                  type="radio"
-                  name="radio-10"
-                  v-model="form.payment"
-                  value="0"
-                  class="radio checked:bg-red-500"
-                  checked
-                />
-                <span class="text-lg font-semibold">Paypal</span>
-              </label>
-              <p class="ml-8">
-                Pay via PayPal: you can pay with your credit card if you dont
-                have a PayPal account.
-              </p>
-            </div>
+          <div v-if="paymentOpen">
             <div class="form-control">
               <label class="flex justify-start gap-2 mb-2">
                 <input
@@ -208,12 +165,35 @@
                   value="1"
                   class="radio checked:bg-red-500"
                   checked
+                  @click="showLaterBtn()"
                 />
                 <span class="text-lg font-semibold">Pay later (cash)</span>
               </label>
-              <p class="ml-8">Pay with cash on meeting.</p>
+              <p class="ml-8" v-if="showPayLater">Pay with cash on meeting.</p>
             </div>
-          </div> -->
+            <div class="mt-5 form-control">
+              <label class="flex justify-start gap-2 mb-2">
+                <input
+                  type="radio"
+                  name="radio-10"
+                  v-model="form.payment"
+                  value="0"
+                  class="radio checked:bg-red-500"
+                  checked
+                  @click="showPaypalBtn()"
+                />
+                <span class="text-lg font-semibold">Paypal</span>
+              </label>
+
+              <div v-if="showPayNow">
+                <div ref="paypal"></div>
+                <p class="ml-8">
+                  Pay via PayPal: you can pay with your credit card if you dont
+                  have a PayPal account.
+                </p>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
 
@@ -234,7 +214,7 @@
       </div>
       <div class="mt-4">
         <button
-          v-if="detailOpen === false && form.payment"
+          v-if="detailOpen === false && form.payment == 1"
           type="submit"
           class="w-full bg-green-700 border-none btn hover:bg-green-900"
         >
@@ -283,10 +263,13 @@ export default {
       total: 0,
       paymentOpen: false,
       detailOpen: true,
+      showPayNow: false,
+      showPayLater: false,
     };
   },
 
   created() {
+    this.setDefault();
     this.setStart();
     this.getTotal();
   },
@@ -305,7 +288,40 @@ export default {
   //   document.body.appendChild(script);
   // },
 
+  mounted() {
+    console.log(this.form.payment);
+  },
+
   methods: {
+    setDefault() {
+      let pay = this.$route.query.pay;
+      if (pay == "now") {
+        this.form.payment = 0;
+        this.showPaypalBtn();
+      } else {
+        this.form.payment = 1;
+        this.showLaterBtn();
+      }
+    },
+
+    showPaypalBtn() {
+      this.form.payment = 0;
+      this.showPayLater = false;
+      this.showPayNow = true;
+
+      const script = document.createElement("script");
+      script.src =
+        "https://www.paypal.com/sdk/js?client-id=AWYqwZP_0zlnYZm38Lz7ZkaPUbfyCS5_2ryOkE89UrAiq3KrO6rsrRmIXDfmvLanv290iZwk56tcUgKE";
+      script.addEventListener("load", this.setLoaded);
+      document.body.appendChild(script);
+    },
+
+    showLaterBtn() {
+      this.form.payment = 1;
+      this.showPayNow = false;
+      this.showPayLater = true;
+    },
+
     getTotal() {
       let priceAdult = this.wishlist?.adult * this.priceAdult?.price;
       let priceChild = this.wishlist?.child * this.priceChild?.price;
