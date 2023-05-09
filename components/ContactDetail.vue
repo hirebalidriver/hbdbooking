@@ -167,9 +167,9 @@
                   checked
                   @click="showLaterBtn()"
                 />
-                <span class="text-lg font-semibold">Pay later (cash)</span>
+                <span class="text-lg font-semibold">Pay Later (cash)</span>
               </label>
-              <p class="ml-8" v-if="showPayLater">Pay with cash on meeting.</p>
+              <p class="ml-8" v-if="showPayLater">Pay cash in person.</p>
             </div>
             <div class="mt-5 form-control">
               <label class="flex justify-start gap-2 mb-2">
@@ -182,7 +182,7 @@
                   checked
                   @click="showPaypalBtn()"
                 />
-                <span class="text-lg font-semibold">Paypal</span>
+                <span class="text-lg font-semibold">Pay Now</span>
               </label>
 
               <div v-if="showPayNow">
