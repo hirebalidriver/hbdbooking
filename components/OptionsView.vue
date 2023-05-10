@@ -204,6 +204,8 @@ export default {
           date: moment(this.date).format("YYYY-DD-MM"),
           adult: Number(this.adult),
           child: Number(this.child),
+          adult_price: Number(this.totalAdult),
+          child_price: Number(this.totalChild),
         };
 
         await this.$store.dispatch("wishlist/add", formData);

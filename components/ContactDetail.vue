@@ -257,6 +257,7 @@ export default {
         note: "",
         payment: 0,
         paypalEmail: "",
+        orderId: "",
       },
       checkAgree: false,
       isPaymentAmountModalVisible: false,
@@ -308,12 +309,14 @@ export default {
       this.form.payment = 0;
       this.showPayLater = false;
       this.showPayNow = true;
+      if (typeof document !== "undefined") {
+        const script = document.createElement("script");
 
-      const script = document.createElement("script");
-      script.src =
-        "https://www.paypal.com/sdk/js?client-id=AWYqwZP_0zlnYZm38Lz7ZkaPUbfyCS5_2ryOkE89UrAiq3KrO6rsrRmIXDfmvLanv290iZwk56tcUgKE";
-      script.addEventListener("load", this.setLoaded);
-      document.body.appendChild(script);
+        script.src =
+          "https://www.paypal.com/sdk/js?client-id=AWYqwZP_0zlnYZm38Lz7ZkaPUbfyCS5_2ryOkE89UrAiq3KrO6rsrRmIXDfmvLanv290iZwk56tcUgKE";
+        script.addEventListener("load", this.setLoaded);
+        document.body.appendChild(script);
+      }
     },
 
     showLaterBtn() {
@@ -431,6 +434,8 @@ export default {
             const orderPaypal = await actions.order.capture();
             this.form.payment = 0;
             this.checkAgree = true;
+            this.form.paypalEmail = orderPaypal.payer.email_address;
+            this.form.orderId = orderPaypal.id;
             await this.$store.dispatch("wishlist/booking", this.form);
             this.$router.push("/success/" + this.bookingId);
           },
