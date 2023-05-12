@@ -23,6 +23,7 @@
         :tourID="tourId"
         :optionID="item.id"
         :title="item.title"
+        :description="item.description"
         :inclusions="item.inclusions"
         :prices="item.prices"
         :times="item.times"

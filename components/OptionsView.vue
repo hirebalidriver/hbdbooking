@@ -4,8 +4,10 @@
       <div class="grid grid-cols-1 md:grid-cols-3">
         <div class="col-span-2 px-6 py-6 border-b-2 md:border-r-2">
           <h2 class="mb-5 text-2xl font-bold">{{ title }}</h2>
-          <p>Inclusions</p>
+          <div class="flex gap-2 mb-3" v-html="description"></div>
+          <span>Inclusions : </span>
           <div class="flex gap-2 mb-3" v-html="inclusions"></div>
+
           <div class="flex flex-row gap-3">
             <span v-for="(item, index) in times" :key="index">
               <button
@@ -89,7 +91,15 @@ import { mapGetters } from "vuex";
 import moment from "moment";
 
 export default {
-  props: ["title", "prices", "inclusions", "times", "optionID", "tourID"],
+  props: [
+    "title",
+    "prices",
+    "inclusions",
+    "times",
+    "optionID",
+    "tourID",
+    "description",
+  ],
 
   data: () => ({
     totalAdult: 0,
