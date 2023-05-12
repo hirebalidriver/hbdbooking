@@ -27,8 +27,51 @@
         <div class="stat-title">Traveller name : {{ booking.name }}</div>
         <div class="stat-title">Phone : {{ booking.phone }}</div>
         <div class="stat-title">Hotel : {{ booking.hotel }}</div>
+        <div v-if="detail" class="mt-5">
+          <div class="overflow-x-auto">
+            <table class="table w-full">
+              <thead>
+                <tr>
+                  <th></th>
+                  <th>Price</th>
+                  <th>Total</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Adult</td>
+                  <td>{{ booking.adult }} x USD {{ booking.adult_price }}</td>
+                  <td>USD {{ booking.adult * booking.adult_price }}</td>
+                </tr>
+                <tr>
+                  <td>Child</td>
+                  <td>{{ booking.child }} x USD {{ booking.child_price }}</td>
+                  <td>USD {{ booking.child * booking.child_price }}</td>
+                </tr>
+
+                <tr>
+                  <td colspan="2">Total</td>
+                  <td>USD {{ booking.price }}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="stat-title">Description :</div>
+          <div
+            class="mb-3 stat-title"
+            v-html="booking.options?.description"
+          ></div>
+          <div class="stat-title">Tour Inclusion :</div>
+          <div class="stat-title" v-html="booking.options?.inclusions"></div>
+        </div>
         <div class="stat-actions">
-          <button class="btn btn-sm">Detail</button>
+          <button class="btn btn-sm" @click="hideDetail()" v-if="hideButton">
+            Hide
+          </button>
+          <button class="btn btn-sm" @click="showDetail()" v-else>
+            Detail
+          </button>
+
           <button class="btn btn-sm">Sent to email</button>
           <button class="btn btn-sm">Contact Us</button>
         </div>
@@ -41,6 +84,13 @@
 import { mapGetters } from "vuex";
 import moment from "moment";
 export default {
+  data() {
+    return {
+      detail: false,
+      hideButton: false,
+    };
+  },
+
   created() {
     this.getDetail();
   },
@@ -71,6 +121,16 @@ export default {
       // console.log(formData);
       await this.$store.dispatch("wishlist/bookingDetail", formData);
       this.$store.dispatch("general/setMenu", 3);
+    },
+
+    showDetail() {
+      this.detail = true;
+      this.hideButton = true;
+    },
+
+    hideDetail() {
+      this.detail = false;
+      this.hideButton = false;
     },
   },
 };
