@@ -2,13 +2,15 @@
   <div id="options">
     <div class="w-full border shadow-xl card bg-base-100">
       <div class="grid grid-cols-1 md:grid-cols-3">
-        <div class="col-span-2 px-6 py-6 border-b-2 md:border-r-2">
+        <div
+          class="col-span-2 px-6 py-6 border-b-2 md:border-b-0 md:border-r-2"
+        >
           <h2 class="mb-5 text-2xl font-bold">{{ title }}</h2>
           <div class="flex gap-2 mb-3" v-html="description"></div>
-          <span>Inclusions : </span>
-          <div class="flex gap-2 mb-3" v-html="inclusions"></div>
+          <!-- <span>Inclusions : </span>
+          <div class="flex gap-2 mb-3" v-html="inclusions"></div> -->
 
-          <div class="flex flex-row gap-3">
+          <div class="flex flex-wrap w-full gap-3">
             <span v-for="(item, index) in times" :key="index">
               <button
                 v-if="item.id == sTime"
@@ -27,7 +29,7 @@
             </span>
           </div>
         </div>
-        <div class="w-full px-6 py-6 text-right border-b-2">
+        <div class="w-full px-6 py-6 text-right">
           <h3 class="text-lg font-bold">USD {{ getTot }}</h3>
           <div class="mb-3" v-for="(item, index) in prices" :key="index">
             <div
@@ -59,29 +61,29 @@
             <button class="w-full bg-green-700 btn" @click="orderNow('now')">
               Book Now
             </button>
-            <button
+            <!-- <button
               class="w-full mt-2 btn btn-outline"
               @click="orderNow('later')"
             >
               Pay Later
-            </button>
+            </button> -->
           </div>
           <div v-else>
             <button class="w-full bg-green-700 btn" disabled="disabled">
               Book Now
             </button>
-            <button class="w-full mt-2 btn btn-outline" disabled="disabled">
+            <!-- <button class="w-full mt-2 btn btn-outline" disabled="disabled">
               Pay Later
-            </button>
+            </button> -->
           </div>
         </div>
       </div>
-      <div class="px-6 py-5">
+      <!-- <div class="px-6 py-5">
         <p>
           <strong>Reserve Now & Pay Later</strong> is an easy way to secure your
           spot while keeping your plans flexible.
         </p>
-      </div>
+      </div> -->
     </div>
   </div>
 </template>
