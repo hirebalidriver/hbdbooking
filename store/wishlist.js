@@ -98,6 +98,16 @@ export const actions = {
       console.log("error", e);
     }
   },
+
+  async sendMail(_, credetials) {
+    try {
+      await this.$axios.$get("/api/front/wishlist/booking/send/mail", {
+        params: credetials,
+      });
+    } catch (e) {
+      console.log("error", e);
+    }
+  },
 };
 
 export default {

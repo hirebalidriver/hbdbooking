@@ -72,8 +72,8 @@
             Detail
           </button>
 
-          <button class="btn btn-sm">Sent to email</button>
-          <button class="btn btn-sm">Contact Us</button>
+          <button class="btn btn-sm" @click="sendMail()">Sent to email</button>
+          <!-- <button class="btn btn-sm">Contact Us</button> -->
         </div>
       </div>
     </div>
@@ -88,6 +88,7 @@ export default {
     return {
       detail: false,
       hideButton: false,
+      hideSendMail: false,
     };
   },
 
@@ -121,6 +122,23 @@ export default {
       // console.log(formData);
       await this.$store.dispatch("wishlist/bookingDetail", formData);
       this.$store.dispatch("general/setMenu", 3);
+    },
+
+    async sendMail() {
+      let formData = {
+        id: this.$route.params.id,
+      };
+      await this.$store.dispatch("wishlist/sendMail", formData);
+      // this.hideSendMail = true;
+      this.setAlert("Email has been sent");
+    },
+
+    setAlert(value) {
+      let formData = {
+        alert: true,
+        messageAlert: value,
+      };
+      this.$store.dispatch("general/setAlert", formData);
     },
 
     showDetail() {
