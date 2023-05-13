@@ -266,6 +266,7 @@ export default {
       detailOpen: true,
       showPayNow: false,
       showPayLater: false,
+      paypalClientID: process.env.NUXT_BASE_PAYPAL_CLIENT,
     };
   },
 
@@ -313,7 +314,7 @@ export default {
         const script = document.createElement("script");
 
         script.src =
-          "https://www.paypal.com/sdk/js?client-id=AWYqwZP_0zlnYZm38Lz7ZkaPUbfyCS5_2ryOkE89UrAiq3KrO6rsrRmIXDfmvLanv290iZwk56tcUgKE";
+          "https://www.paypal.com/sdk/js?client-id=AZXYqeqDwlHvpoY3VEVl_mA-WmbffCugor1pHX0CF12cABbwXX8v4Qbc4IONWqMuywUNRvF4O6ZIam24";
         script.addEventListener("load", this.setLoaded);
         document.body.appendChild(script);
       }
@@ -391,7 +392,7 @@ export default {
 
         const script = document.createElement("script");
         script.src =
-          "https://www.paypal.com/sdk/js?client-id=AWYqwZP_0zlnYZm38Lz7ZkaPUbfyCS5_2ryOkE89UrAiq3KrO6rsrRmIXDfmvLanv290iZwk56tcUgKE";
+          "https://www.paypal.com/sdk/js?client-id=AZXYqeqDwlHvpoY3VEVl_mA-WmbffCugor1pHX0CF12cABbwXX8v4Qbc4IONWqMuywUNRvF4O6ZIam24";
         script.addEventListener("load", this.setLoaded);
         document.body.appendChild(script);
       }
