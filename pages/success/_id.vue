@@ -57,12 +57,10 @@
             </table>
           </div>
           <div class="stat-title">Description :</div>
-          <div
-            class="mb-3 stat-title"
-            v-html="booking.options?.description"
-          ></div>
+
+          <div class="w-full mb-3" v-html="booking.options?.description"></div>
           <div class="stat-title">Tour Inclusion :</div>
-          <div class="stat-title" v-html="booking.options?.inclusions"></div>
+          <div class="w-full" v-html="booking.options?.inclusions"></div>
         </div>
         <div class="stat-actions">
           <button class="btn btn-sm" @click="hideDetail()" v-if="hideButton">
