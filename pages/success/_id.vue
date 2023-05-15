@@ -21,9 +21,10 @@
         <div class="text-xl font-bold text-black">
           {{ booking.date }} • {{ booking.time | timeFormat }}
         </div>
-        <div class="stat-title">
+        <div class="stat-title" v-if="booking.child != 0">
           {{ booking.adult }} Adult and {{ booking.child }} Child
         </div>
+        <div class="stat-title" v-else>{{ booking.adult }} Adult</div>
         <div class="stat-title">Traveller name : {{ booking.name }}</div>
         <div class="stat-title">Phone : {{ booking.phone }}</div>
         <div class="stat-title">Hotel : {{ booking.hotel }}</div>
@@ -43,7 +44,7 @@
                   <td>{{ booking.adult }} x USD {{ booking.adult_price }}</td>
                   <td>USD {{ booking.adult * booking.adult_price }}</td>
                 </tr>
-                <tr>
+                <tr v-if="booking.child != 0">
                   <td>Child</td>
                   <td>{{ booking.child }} x USD {{ booking.child_price }}</td>
                   <td>USD {{ booking.child * booking.child_price }}</td>

@@ -191,10 +191,10 @@ export default {
     },
 
     selectTime(value) {
+      this.sTime = null;
       this.sTime = value;
       this.bookButton = true;
       this.timeStatus = true;
-      console.log("select time", this.sTime);
     },
 
     setAlert(value) {

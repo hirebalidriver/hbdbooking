@@ -16,15 +16,19 @@
           </h2>
         </div>
         <p>{{ adult }} adult x USD {{ priceAdult?.price }}</p>
-        <p>{{ child }} child x USD {{ priceChild?.price }}</p>
+        <p v-if="child != 0">{{ child }} child x USD {{ priceChild?.price }}</p>
         <!-- <p>TOTAL USD 178</p> -->
         <p>{{ date | dateFormat }} {{ time | timeFormat }}</p>
         <p>Free cancellation before {{ date | dateFormat }}</p>
         <div class="flex justify-between py-4 mt-4 border-t-2">
           <h2 class="text-lg font-bold">Total Price</h2>
-          <h2 class="text-lg font-bold">
+          <h2 class="text-lg font-bold" v-if="child != 0">
             USD
             {{ adult * priceAdult?.price + child * priceChild?.price }}
+          </h2>
+          <h2 class="text-lg font-bold" v-else>
+            USD
+            {{ adult * priceAdult?.price }}
           </h2>
         </div>
       </div>
