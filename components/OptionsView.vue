@@ -44,17 +44,20 @@
               </p>
             </div>
           </div>
-          <div class="mb-3" v-for="(item, index) in prices" :key="index">
-            <div
-              v-if="
-                item.type == 2 &&
-                item.people <= child &&
-                item.people_end >= child
-              "
-            >
-              <p>
-                {{ child }} child x USD {{ item.price }} = USD {{ totalChild }}
-              </p>
+          <div v-if="child != 0">
+            <div class="mb-3" v-for="(item, index) in prices" :key="index">
+              <div
+                v-if="
+                  item.type == 2 &&
+                  item.people <= child &&
+                  item.people_end >= child
+                "
+              >
+                <p>
+                  {{ child }} child x USD {{ item.price }} = USD
+                  {{ totalChild }}
+                </p>
+              </div>
             </div>
           </div>
           <div v-if="bookButton">
