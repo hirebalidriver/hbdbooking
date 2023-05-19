@@ -2,6 +2,8 @@ export const state = () => ({
   alert: false,
   messageAlert: "",
   menu: 1,
+  showDetail: true,
+  showDetailID: 0,
 });
 
 export const getters = {
@@ -14,6 +16,12 @@ export const getters = {
   menu(state) {
     return state.menu;
   },
+  showDetail(state) {
+    return state.showDetail;
+  },
+  showDetailID(state) {
+    return state.showDetailID;
+  },
 };
 
 export const mutations = {
@@ -22,6 +30,12 @@ export const mutations = {
   },
   SET_MENU(state, value) {
     state.menu = value;
+  },
+  SET_SHOW_DETAIL(state, value) {
+    state.showDetail = value;
+  },
+  SET_SHOW_DETAIL_ID(state, value) {
+    state.showDetailID = value;
   },
   SET_MESSAGE_ALERT(state, value) {
     state.messageAlert = value;
@@ -51,6 +65,11 @@ export const actions = {
 
   setMenu({ commit }, credetials) {
     commit("SET_MENU", credetials);
+  },
+
+  setShowDetail({ commit }, credetials) {
+    commit("SET_SHOW_DETAIL", credetials.status);
+    commit("SET_SHOW_DETAIL_ID", credetials.id);
   },
 };
 

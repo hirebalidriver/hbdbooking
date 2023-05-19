@@ -29,6 +29,7 @@
         :times="item.times"
         :adult="adult"
         :child="child"
+        :selectedOption="true"
       />
     </div>
   </div>
@@ -92,6 +93,12 @@ export default {
         child: this.child,
       };
       await this.$store.dispatch("tour/options", formData);
+
+      let formDetail = {
+        status: true,
+        id: this.options[0].id,
+      };
+      this.$store.dispatch("general/setShowDetail", formDetail);
       this.loading = false;
     },
   },
