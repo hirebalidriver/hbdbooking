@@ -21,7 +21,7 @@
               </button>
               <button
                 v-else
-                class="btn btn-sm btn-outline"
+                class="text-lg font-bold text-green-800 border-2 border-green-600 btn btn-sm btn-outline"
                 @click="selectTime(item.id)"
               >
                 {{ item.time | timeFormat }}
@@ -72,9 +72,11 @@
             </button> -->
           </div>
           <div v-else>
-            <button class="w-full bg-green-700 btn" disabled="disabled">
-              Book Now
-            </button>
+            <div class="w-full tooltip" data-tip="Select a Time to Book">
+              <button class="w-full bg-green-700 btn" disabled="disabled">
+                Book Now
+              </button>
+            </div>
             <!-- <button class="w-full mt-2 btn btn-outline" disabled="disabled">
               Pay Later
             </button> -->
