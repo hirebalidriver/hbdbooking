@@ -98,12 +98,6 @@
           </div>
         </div>
       </div>
-      <!-- <div class="px-6 py-5">
-        <p>
-          <strong>Reserve Now & Pay Later</strong> is an easy way to secure your
-          spot while keeping your plans flexible.
-        </p>
-      </div> -->
     </div>
   </div>
 </template>
@@ -234,8 +228,6 @@ export default {
     },
 
     async orderNow(item) {
-      console.log("CLICKED");
-
       if (this.timeStatus) {
         let formData = {
           package_id: Number(this.tourID),

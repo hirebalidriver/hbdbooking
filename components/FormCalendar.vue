@@ -107,12 +107,6 @@ export default {
 input[type="date"] {
   display: block;
 
-  /* Solution 1 */
-  /* -webkit-appearance: textfield;
-  -moz-appearance: textfield;
-  min-height: 1.2em; */
-
-  /* Solution 2 */
   min-width: 96%;
 }
 </style>
