@@ -20,6 +20,7 @@
       <options-view
         v-for="(item, index) in options"
         :key="index"
+        :numberList="index"
         :tourID="tourId"
         :optionID="item.id"
         :title="item.title"

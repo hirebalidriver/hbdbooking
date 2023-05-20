@@ -12,6 +12,11 @@
         <div
           class="col-span-2 px-6 py-6 border-b-2 md:border-b-0 md:border-r-2"
         >
+          <p
+            class="px-3 py-2 mb-3 text-gray-500 bg-gray-300 rounded-md btn btn-sm btn-ghost disabled"
+          >
+            Option {{ numberList + 1 }}
+          </p>
           <h2 class="mb-5 text-2xl font-bold">{{ title }}</h2>
           <div v-if="showDetail && showDetailID == optionID">
             <div class="flex gap-2 mb-3" v-html="description"></div>
@@ -20,7 +25,7 @@
               <span v-for="(item, index) in times" :key="index">
                 <button
                   v-if="item.id == sTime"
-                  class="btn btn-sm"
+                  class="text-lg font-bold btn btn-sm"
                   @click="selectTime(item.id)"
                 >
                   {{ item.time | timeFormat }}
@@ -109,6 +114,7 @@ import moment from "moment";
 
 export default {
   props: [
+    "numberList",
     "title",
     "prices",
     "inclusions",
@@ -133,6 +139,10 @@ export default {
       value = moment(value, "HH:mm");
       return value.format("HH:mm");
     },
+  },
+
+  created() {
+    this.selectTime(this.times[0].id);
   },
 
   mounted() {
