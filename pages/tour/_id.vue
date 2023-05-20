@@ -74,7 +74,12 @@ export default {
       this.date = this.$route.query.date;
       this.tourId = this.$route.query.tour;
       this.adult = this.$route.query.adult_number;
-      this.child = this.$route.query.child_number;
+      if (this.$route.query.child_number) {
+        this.child = this.$route.query.child_number;
+      } else {
+        this.child = 0;
+      }
+
       // console.log("date", this.date);
     },
 
