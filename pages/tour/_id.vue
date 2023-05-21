@@ -72,9 +72,22 @@ export default {
 
   methods: {
     setDefault() {
-      this.date = this.$route.query.date;
       this.tourId = this.$route.query.tour;
-      this.adult = this.$route.query.adult_number;
+
+      if (this.$route.query.date) {
+        this.date = this.$route.query.date;
+      } else {
+        const tomorrow = new Date();
+        tomorrow.setDate(new Date().getDate() + 1);
+        this.date = tomorrow.toLocaleDateString();
+      }
+
+      if (this.$route.query.adult_number) {
+        this.adult = this.$route.query.adult_number;
+      } else {
+        this.adult = 1;
+      }
+
       if (this.$route.query.child_number) {
         this.child = this.$route.query.child_number;
       } else {
