@@ -20,7 +20,7 @@
     </div>
 
     <div
-      class="fixed w-2/5 shadow-lg alert alert-error bottom-4 right-4"
+      class="fixed w-2/5 shadow-lg alert alert-warning bottom-4 right-4"
       @click="closeAlert()"
       v-if="alert"
     >

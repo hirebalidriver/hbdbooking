@@ -228,23 +228,27 @@ export default {
     },
 
     async orderNow(item) {
-      if (this.timeStatus) {
-        let formData = {
-          package_id: Number(this.tourID),
-          tour_id: Number(this.optionID),
-          time_id: this.sTime,
-          date: moment(this.date).format("YYYY-DD-MM"),
-          adult: Number(this.adult),
-          child: Number(this.child),
-          adult_price: Number(this.totalAdult),
-          child_price: Number(this.totalChild),
-        };
-
-        await this.$store.dispatch("wishlist/add", formData);
-
-        this.$router.push("/payment/" + this.id + "?pay=" + item);
+      if (Number(this.adult) < 1) {
+        this.setAlert("Number of Adult cannot 0");
       } else {
-        this.setAlert("Please, Select the time");
+        if (this.timeStatus) {
+          let formData = {
+            package_id: Number(this.tourID),
+            tour_id: Number(this.optionID),
+            time_id: this.sTime,
+            date: moment(this.date).format("YYYY-DD-MM"),
+            adult: Number(this.adult),
+            child: Number(this.child),
+            adult_price: Number(this.totalAdult),
+            child_price: Number(this.totalChild),
+          };
+
+          await this.$store.dispatch("wishlist/add", formData);
+
+          this.$router.push("/payment/" + this.id + "?pay=" + item);
+        } else {
+          this.setAlert("Please, Select the time");
+        }
       }
     },
 

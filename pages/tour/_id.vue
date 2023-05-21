@@ -55,7 +55,7 @@ export default {
       loading: false,
       date: null,
       tourId: 0,
-      adult: 0,
+      adult: 1,
       child: 0,
     };
   },
@@ -78,11 +78,11 @@ export default {
         this.date = this.$route.query.date;
       } else {
         const tomorrow = new Date();
-        tomorrow.setDate(new Date().getDate() + 1);
+        tomorrow.setDate(new Date().getDate());
         this.date = tomorrow.toLocaleDateString();
       }
 
-      if (this.$route.query.adult_number) {
+      if (this.$route.query.adult_number > 0) {
         this.adult = this.$route.query.adult_number;
       } else {
         this.adult = 1;
