@@ -8,8 +8,10 @@
           <input type="checkbox" checked="checked" class="checkbox" />
           <p>
             I have read and agree to the website
-            <nuxt-link class="text-orange-700" to="https://hirebalidriver.com"
-              >terms and conditions hirebalidriver.com</nuxt-link
+            <a
+              class="text-orange-700"
+              href="https://hirebalidriver.com/terms-and-conditions/"
+              >terms and conditions hirebalidriver.com</a
             >
           </p>
         </div>
