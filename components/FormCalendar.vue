@@ -82,7 +82,7 @@ export default {
       let formData = {
         adult: this.adultCount,
         child: this.childCount,
-        date: this.date,
+        date: this.initialDate,
       };
       this.$store.dispatch("tour/setPeople", formData);
 
