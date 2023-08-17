@@ -77,9 +77,15 @@ export default {
       if (this.$route.query.date) {
         this.date = this.$route.query.date;
       } else {
-        const tomorrow = new Date();
-        tomorrow.setDate(new Date().getDate());
-        this.date = tomorrow.toLocaleDateString();
+        // const tomorrow = new Date();
+        // tomorrow.setDate(new Date().getDate());
+        // this.date = tomorrow.toLocaleDateString();
+
+        const now = new Date();
+        const today = now.getDate();
+        const tomorrow = new Date(now);
+        this.date = tomorrow.setDate(today + 1);
+        // console.log("DATE::", this.date);
       }
 
       if (this.$route.query.adult_number > 0) {
