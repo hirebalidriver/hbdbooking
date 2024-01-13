@@ -1,7 +1,7 @@
 <template>
   <div id="options">
     <div
-      :class="`w-full shadow-xl card bg-base-100 ${
+      :class="`w-full shadow-xl hover:cursor-pointer card bg-base-100 ${
         showDetail && showDetailID == optionID
           ? 'border border-green-600'
           : 'border'
