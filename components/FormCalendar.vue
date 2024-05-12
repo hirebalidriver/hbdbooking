@@ -12,6 +12,7 @@
           class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
           required
         />
+        <span v-if="errorDate" class="errorMsg">{{ errorDateMsg }}</span>
       </div>
       <div class="mb-6">
         <label for="email" class="block mb-2 text-sm font-medium text-gray-900"
@@ -57,7 +58,10 @@ export default {
     return {
       adultCount: this.adult,
       childCount: this.child,
-      initialDate: moment(this.date).format("YYYY-MM-DD"),
+      // initialDate: moment(this.date).format("YYYY-MM-DD"),
+      initialDate: this.getNow(),
+      errorDate: false,
+      errorDateMsg: "Please choose a different date!",
     };
   },
 
@@ -77,27 +81,41 @@ export default {
   },
 
   methods: {
+
+    getNow () {
+      if(moment(this.date).format("YYYY-MM-DD") < moment().format("YYYY-MM-DD")) {
+          return moment().format("YYYY-MM-DD");
+      }else{
+        return moment(this.date).format("YYYY-MM-DD");
+      }
+    },
+
+      
     async getCheck() {
-      console.log("check");
-      let formData = {
-        adult: this.adultCount,
-        child: this.childCount,
-        date: this.initialDate,
-      };
-      this.$store.dispatch("tour/setPeople", formData);
+      if(moment(this.initialDate).format("YYYY-MM-DD") < moment().format("YYYY-MM-DD")) {
+          this.errorDate = true;
+      }else{
+        this.errorDate = false;
+        let formData = {
+          adult: this.adultCount,
+          child: this.childCount,
+          date: this.initialDate,
+        };
+        this.$store.dispatch("tour/setPeople", formData);
 
-      let form = {
-        id: this.tour,
-        adult: this.adultCount,
-        child: this.childCount,
-      };
-      await this.$store.dispatch("tour/options", form);
+        let form = {
+          id: this.tour,
+          adult: this.adultCount,
+          child: this.childCount,
+        };
+        await this.$store.dispatch("tour/options", form);
 
-      window.scrollTo({
-        top: document.getElementById("options").offsetTop,
-        left: 0,
-        behavior: "smooth",
-      });
+        window.scrollTo({
+          top: document.getElementById("options").offsetTop,
+          left: 0,
+          behavior: "smooth",
+        });
+      }
     },
   },
 };
@@ -108,5 +126,9 @@ input[type="date"] {
   display: block;
 
   min-width: 96%;
+}
+.errorMsg {
+  font-size: 11px;
+  color: red;
 }
 </style>
