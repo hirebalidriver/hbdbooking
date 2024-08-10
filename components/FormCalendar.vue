@@ -83,7 +83,7 @@ export default {
   methods: {
 
     getNow () {
-      if(moment(this.date).format("YYYY-MM-DD") < moment().format("YYYY-MM-DD")) {
+      if(moment(this.date).format("YYYY-MM-DD") <= moment().format("YYYY-MM-DD")) {
           return moment().format("YYYY-MM-DD");
       }else{
         return moment(this.date).format("YYYY-MM-DD");
@@ -92,7 +92,7 @@ export default {
 
       
     async getCheck() {
-      if(moment(this.initialDate).format("YYYY-MM-DD") < moment().format("YYYY-MM-DD")) {
+      if(moment(this.initialDate).format("YYYY-MM-DD") <= moment().format("YYYY-MM-DD")) {
           this.errorDate = true;
       }else{
         this.errorDate = false;
