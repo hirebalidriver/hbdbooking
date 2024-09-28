@@ -20,6 +20,29 @@ export default {
       { name: "format-detection", content: "telephone=no" },
     ],
     link: [{ rel: "icon", type: "image/x-icon", href: "/favicon.png" }],
+    script: [
+      {
+        hid: 'gtag',
+        src: 'https://www.googletagmanager.com/gtag/js?id=G-93Q8YKYLC8', // Ganti dengan Google Analytics ID Anda
+        async: true
+      },
+      {
+        hid: 'gtag-inline',
+        innerHTML: `
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+          gtag('config', 'G-93Q8YKYLC8', {
+            'cookie_domain': 'auto'
+          });
+        `,
+        type: 'text/javascript',
+        charset: 'utf-8'
+      }
+    ],
+    __dangerouslyDisableSanitizersByTagID: {
+      'gtag-inline': ['innerHTML']
+    }
   },
 
   ssr: true,

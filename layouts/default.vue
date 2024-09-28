@@ -48,26 +48,6 @@
 import FooterDefault from "../components/FooterDefault.vue";
 import { mapGetters } from "vuex";
 export default {
-  head() {
-    return {
-      script: [
-        {
-          hid: 'gtag',
-          innerHTML: `
-            window.dataLayer = window.dataLayer || [];
-            function gtag(){dataLayer.push(arguments);}
-            gtag('js', new Date());
-            gtag('config', 'G-93Q8YKYLC8', { 'cookie_domain': 'auto' });
-          `,
-          type: 'text/javascript',
-          charset: 'utf-8'
-        }
-      ],
-      __dangerouslyDisableSanitizersByTagID: {
-        'gtag': ['innerHTML']
-      }
-    };
-  },
   components: { FooterDefault },
   computed: {
     ...mapGetters({
