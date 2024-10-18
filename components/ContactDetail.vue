@@ -361,6 +361,8 @@ export default {
     },
 
     getNext() {
+      // console.log(this.wishlist.id);
+      
       if (!this.form.fname) {
         let msg = { alert: true, messageAlert: "First name required" };
         this.$store.dispatch("general/setAlert", msg);
@@ -380,6 +382,21 @@ export default {
         let msg = { alert: true, messageAlert: "Country required" };
         this.$store.dispatch("general/setAlert", msg);
       } else {
+        let formData = {
+          id: this.wishlist.id,
+          first_name: this.form.fname,
+          last_name: this.form.lname,
+          email: this.form.email,
+          phone_number: this.form.phone,
+          address: this.form.address,
+          country: this.form.country,
+          hotel: this.form.hotel,
+          hotel_address: this.form.hotel_address,
+          special_request:this.form.special_request,
+        };
+
+        this.$store.dispatch("wishlist/update", formData);
+        
         this.paymentOpen = true;
         this.detailOpen = false;
         window.scrollTo({

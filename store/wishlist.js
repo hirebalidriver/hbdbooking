@@ -62,6 +62,18 @@ export const actions = {
     }
   },
 
+  async update({ commit }, credetials) {
+    try {
+      let res = await this.$axios.$get("/api/front/wishlist/update", {
+        params: credetials,
+      });
+
+      commit("SET_ID", res.data.id);
+    } catch (e) {
+      console.log("error", e);
+    }
+  },
+
   async detail({ commit }, credetials) {
     try {
       let res = await this.$axios.$get("/api/front/wishlist/detail", {
