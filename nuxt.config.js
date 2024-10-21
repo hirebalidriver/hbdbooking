@@ -38,10 +38,21 @@ export default {
         `,
         type: 'text/javascript',
         charset: 'utf-8'
+      },
+      {
+        hid: 'clarity',
+        innerHTML: `(function(c,l,a,r,i,t,y){
+                      c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+                      t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+                      y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+                    })(window, document, "clarity", "script", "olwgiv83bx");`,
+        type: 'text/javascript',
+        charset: 'utf-8'
       }
     ],
     __dangerouslyDisableSanitizersByTagID: {
-      'gtag-inline': ['innerHTML']
+      'gtag-inline': ['innerHTML'],
+      clarity: ['innerHTML']
     }
   },
 
