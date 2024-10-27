@@ -48,11 +48,28 @@ export default {
                     })(window, document, "clarity", "script", "olwgiv83bx");`,
         type: 'text/javascript',
         charset: 'utf-8'
+      },
+      {
+        hid: 'gtag-ads',
+        src: 'https://www.googletagmanager.com/gtag/js?id=AW-11342937470',
+        async: true
+      },
+      {
+        hid: 'gtag-config',
+        innerHTML: `
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+          gtag('config', 'AW-11342937470');
+        `,
+        type: 'text/javascript',
+        charset: 'utf-8'
       }
     ],
     __dangerouslyDisableSanitizersByTagID: {
       'gtag-inline': ['innerHTML'],
-      clarity: ['innerHTML']
+      clarity: ['innerHTML'],
+      'gtag-config': ['innerHTML']
     }
   },
 
