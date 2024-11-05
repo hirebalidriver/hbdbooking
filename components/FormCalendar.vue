@@ -5,13 +5,24 @@
         <label for="date" class="block mb-2 text-sm font-medium text-gray-900"
           >Date</label
         >
-        <input
+        <div>
+          <flat-pickr
+              v-model="initialDate"
+              :config="flatpickrOptions"
+              @ready="addDisabledClass"
+              @change="onDateChange"
+              id="date"
+              class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+              required
+            />
+        </div>
+        <!-- <input
           type="date"
           id="date"
           v-model="dob"
           class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
           required
-        />
+        /> -->
         <span v-if="errorDate" class="errorMsg">{{ errorDateMsg }}</span>
       </div>
       <div class="mb-6">
@@ -52,37 +63,64 @@
 
 <script>
 import moment from "moment";
+import Flatpickr from 'vue-flatpickr-component';
+import 'flatpickr/dist/flatpickr.css';
+import { mapGetters } from "vuex";
 export default {
-  props: ["adult", "child", "date", "tour"],
+  components: {flatPickr: Flatpickr},
+  props: ["adult", "child", "date", "tour","pisabledDates"],
   data() {
     return {
       adultCount: this.adult,
       childCount: this.child,
       // initialDate: moment(this.date).format("YYYY-MM-DD"),
-      initialDate: this.getNow(),
       errorDate: false,
       errorDateMsg: "Please choose a different date!",
+      // selectedDate: new Date(),
+      disabledDates: [
+        new Date("2024-11-02"),
+        new Date("2024-11-10"),
+        new Date("2024-11-15"),
+      ],
+      initialDate: this.getNow(),
     };
   },
 
   computed: {
-    dob: {
-      get() {
-        return this.initialDate;
-      },
-      set(newValue) {
-        this.initialDate = newValue;
-      },
+    ...mapGetters({ map_get_black_period: "tour/get_black_period" }),
+    // dob: {
+    //   get() {
+    //     return this.initialDate;
+    //   },
+    //   set(newValue) {
+    //     console.log(newValue);
+        
+    //     this.initialDate = newValue;
+    //   },
+    // },
+    flatpickrOptions() {
+      return {
+        disable: this.disabledDates,
+        dateFormat: 'Y-m-d',
+        onDayCreate: this.onDayCreate,
+        onValueUpdate: this.onDateChange, 
+        defaultDate: this.initialDate,
+        minDate: moment().add(1, 'days').format('YYYY-MM-DD'),
+      };
     },
   },
 
   created() {
     this.getCheck();
+    this.getBlackPeriod();
+    
   },
 
   methods: {
 
     getNow () {
+      console.log(this.disabledDates);
+      
       if(moment(this.date).format("YYYY-MM-DD") <= moment().format("YYYY-MM-DD")) {
           return moment().format("YYYY-MM-DD");
       }else{
@@ -92,7 +130,13 @@ export default {
 
       
     async getCheck() {
-      if(moment(this.initialDate).format("YYYY-MM-DD") <= moment().format("YYYY-MM-DD")) {
+      console.log();
+      // Memastikan tanggal yang dipilih valid
+      const formattedInitialDate = moment(this.initialDate).format("YYYY-MM-DD");
+      
+      if (formattedInitialDate <= moment().format("YYYY-MM-DD") || 
+      this.disabledDates.some(disabledDate => 
+          moment(disabledDate).format("YYYY-MM-DD") === formattedInitialDate)) {
           this.errorDate = true;
       }else{
         this.errorDate = false;
@@ -117,6 +161,32 @@ export default {
         });
       }
     },
+
+    async getBlackPeriod() {
+      let formData = {
+        // id: this.tourId,
+      };
+      await this.$store.dispatch("tour/get_black_period", formData);
+      // console.log(this.map_get_black_period);
+      // Misalnya hasil dari Axios sudah diambil dan disimpan dalam this.map_get_black_period
+      this.disabledDates = this.map_get_black_period.map(item => new Date(item.date))
+      // console.log(data_black_period)
+
+      
+    },
+
+    onDayCreate(dObj, dStr, fp, dayElem) {
+      const date = fp.parseDate(dayElem.dateObj);
+      if (this.disabledDates.some(disabledDate => disabledDate.getTime() === date.getTime())) {
+        dayElem.classList.add('disabled-date');
+      }
+    },
+
+    onDateChange(selectedDates) {
+      console.log(selectedDates);
+      
+      this.initialDate = selectedDates[0]; // Set nilai initialDate ke tanggal terpilih
+    },
   },
 };
 </script>
@@ -130,5 +200,11 @@ input[type="date"] {
 .errorMsg {
   font-size: 11px;
   color: red;
+}
+
+.disabled-date {
+  background-color: #d3d3d3 !important; /* Warna abu-abu */
+  color: #fff !important; /* Warna teks putih agar kontras */
+  pointer-events: none; /* Nonaktifkan interaksi */
 }
 </style>

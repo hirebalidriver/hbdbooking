@@ -14,9 +14,11 @@
     "autoprefixer": "^10.4.14",
     "core-js": "^3.25.3",
     "daisyui": "^2.51.5",
+    "flatpickr": "^4.6.13",
     "nuxt": "^2.15.8",
     "tailwindcss": "^3.3.1",
     "vue": "^2.7.10",
+    "vue-flatpickr-component": "^11.0.5",
     "vue-server-renderer": "^2.7.10",
     "vue-template-compiler": "^2.7.10"
   },

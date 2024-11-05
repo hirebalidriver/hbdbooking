@@ -1,4 +1,5 @@
 <template>
+  
   <div>
     <div class="grid grid-cols-1 mt-5 md:gap-4 md:grid-cols-3">
       <div class="col-span-2">
@@ -125,7 +126,10 @@ export default {
       };
       this.$store.dispatch("general/setShowDetail", formDetail);
       this.loading = false;
-    },
+    }, 
+   
   },
+
+ 
 };
 </script>

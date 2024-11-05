@@ -26,6 +26,9 @@ export const getters = {
   date(state) {
     return state.date;
   },
+  get_black_period(state) {
+    return state.get_black_period;
+  },
 };
 
 export const mutations = {
@@ -46,6 +49,9 @@ export const mutations = {
   },
   SET_TOTAL(state, value) {
     state.total = value;
+  },
+  SET_GET_BLACK_PERIOD(state, value) {
+    state.get_black_period = value;
   },
 };
 
@@ -68,6 +74,17 @@ export const actions = {
       });
 
       commit("SET_OPTIONS", res.data);
+    } catch (e) {
+      console.log("error", e);
+    }
+  },
+  async get_black_period({ commit }, credetials) {
+    try {
+      let res = await this.$axios.$get("/api/front/tour/get_black_period", {
+        params: credetials,
+      });
+
+      commit("SET_GET_BLACK_PERIOD", res.data);
     } catch (e) {
       console.log("error", e);
     }
