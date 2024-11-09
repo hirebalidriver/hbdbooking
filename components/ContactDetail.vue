@@ -293,7 +293,39 @@ export default {
   // },
 
   mounted() {
-    console.log(this.form.payment);
+     // Cek dan ambil hanya data yang diperlukan dari local storage
+     const savedData = localStorage.getItem("bookingFormData");
+    if (savedData) {
+      const parsedData = JSON.parse(savedData);
+      // Hanya mengisi field yang ada di dalam parsedData ke form
+      Object.keys(parsedData).forEach(key => {
+        if (this.form.hasOwnProperty(key)) {
+          this.form[key] = parsedData[key];
+        }
+      });
+    }
+  },
+
+  watch: {
+    form: {
+      deep: true,
+      handler(newForm) {
+        // Hanya simpan field yang digunakan
+        const dataToSave = {
+          fname: newForm.fname,
+          lname: newForm.lname,
+          email: newForm.email,
+          phone: newForm.phone,
+          address: newForm.address,
+          country: newForm.country,
+          hotel: newForm.hotel,
+          hotel_address: newForm.hotel_address,
+          note: newForm.note,
+          // Tambahkan field lainnya sesuai kebutuhan
+        };
+        localStorage.setItem("bookingFormData", JSON.stringify(dataToSave));
+      }
+    }
   },
 
   methods: {
