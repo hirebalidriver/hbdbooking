@@ -77,11 +77,7 @@ export default {
       errorDate: false,
       errorDateMsg: "Please choose a different date!",
       // selectedDate: new Date(),
-      disabledDates: [
-        new Date("2024-11-02"),
-        new Date("2024-11-10"),
-        new Date("2024-11-15"),
-      ],
+      disabledDates: [],
       initialDate: this.getNow(),
     };
   },
@@ -93,7 +89,6 @@ export default {
     //     return this.initialDate;
     //   },
     //   set(newValue) {
-    //     console.log(newValue);
         
     //     this.initialDate = newValue;
     //   },
@@ -113,13 +108,11 @@ export default {
   created() {
     this.getCheck();
     this.getBlackPeriod();
-    
   },
 
   methods: {
 
     getNow () {
-      console.log(this.disabledDates);
       
       if(moment(this.date).format("YYYY-MM-DD") <= moment().format("YYYY-MM-DD")) {
           return moment().format("YYYY-MM-DD");
@@ -130,7 +123,6 @@ export default {
 
       
     async getCheck() {
-      console.log();
       // Memastikan tanggal yang dipilih valid
       const formattedInitialDate = moment(this.initialDate).format("YYYY-MM-DD");
       
@@ -167,10 +159,8 @@ export default {
         // id: this.tourId,
       };
       await this.$store.dispatch("tour/get_black_period", formData);
-      // console.log(this.map_get_black_period);
       // Misalnya hasil dari Axios sudah diambil dan disimpan dalam this.map_get_black_period
       this.disabledDates = this.map_get_black_period.map(item => new Date(item.date))
-      // console.log(data_black_period)
 
       
     },
@@ -183,9 +173,18 @@ export default {
     },
 
     onDateChange(selectedDates) {
-      console.log(selectedDates);
-      
       this.initialDate = selectedDates[0]; // Set nilai initialDate ke tanggal terpilih
+    },
+  },
+  watch: {
+    initialDate(newVal, oldVal) {
+      // Lakukan aksi lain berdasarkan perubahan nilai di sini
+      let formData = {
+        date: newVal,
+      };
+      this.$store.dispatch("tour/setDate", formData);
+      console.log(this.date);
+      
     },
   },
 };

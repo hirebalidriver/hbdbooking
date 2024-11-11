@@ -99,6 +99,10 @@ export const actions = {
   setTotal({ commit }, credetials) {
     commit("SET_TOTAL", credetials.total);
   },
+
+  setDate({ commit }, credetials) {
+    commit("SET_DATE", credetials.date);
+  },
 };
 
 export default {

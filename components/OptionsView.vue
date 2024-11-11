@@ -228,9 +228,13 @@ export default {
     },
 
     async orderNow(item) {
+      console.log('date'+this.date);
+      
       if (Number(this.adult) < 1) {
         this.setAlert("Number of Adult cannot 0");
-      } else {
+      } else if(!this.date){
+        this.setAlert("Date cannot be empty");
+      }else {
         if (this.timeStatus) {
           let formData = {
             package_id: Number(this.tourID),
