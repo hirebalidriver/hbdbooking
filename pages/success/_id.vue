@@ -9,7 +9,7 @@
             Reservation success
           </h1>
           <h2 class="mb-10">
-            Booking details has been sent to <b>{{ booking.email }}</b>
+            Booking details has been sent to <b type="email">{{ booking.email }}</b>
           </h2>
         </div>
         <div class="mb-2 font-semibold">
