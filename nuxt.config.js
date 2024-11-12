@@ -64,12 +64,23 @@ export default {
         `,
         type: 'text/javascript',
         charset: 'utf-8'
+      },
+      {
+        hid: 'gtm',
+        innerHTML: `(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+                      new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+                      j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+                      'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+                     })(window,document,'script','dataLayer','GTM-MPMW5ZWF');`,
+        type: 'text/javascript',
+        charset: 'utf-8'
       }
     ],
     __dangerouslyDisableSanitizersByTagID: {
       'gtag-inline': ['innerHTML'],
       clarity: ['innerHTML'],
-      'gtag-config': ['innerHTML']
+      'gtag-config': ['innerHTML'],
+      gtm: ['innerHTML']
     }
   },
 
@@ -80,7 +91,9 @@ export default {
   css: ["@/assets/css/main.css"],
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
-  plugins: [],
+  plugins: [
+    '~/plugins/gtm-noscript.js'
+  ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
   components: true,
