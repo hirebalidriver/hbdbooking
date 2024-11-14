@@ -320,9 +320,9 @@ export default {
           phone: newForm.phone,
           address: newForm.address,
           country: newForm.country,
-          hotel: newForm.hotel,
-          hotel_address: newForm.hotel_address,
-          note: newForm.note,
+          // hotel: newForm.hotel,
+          // hotel_address: newForm.hotel_address,
+          // note: newForm.note,
           // Tambahkan field lainnya sesuai kebutuhan
         };
         localStorage.setItem("bookingFormData", JSON.stringify(dataToSave));
