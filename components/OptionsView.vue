@@ -178,9 +178,9 @@ export default {
       let formData = {
         total: this.totalAdult + this.totalChild,
       };
-      this.$store.dispatch("tour/setTotal", formData);
+      console.log(this.totalChild)
 
-      return parseInt(this.totalAdult) + parseInt(this.totalChild);
+      return (parseFloat(this.totalAdult) + parseFloat(this.totalChild)).toFixed(2);
     },
   },
 
