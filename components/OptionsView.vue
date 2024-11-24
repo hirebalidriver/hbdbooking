@@ -161,7 +161,7 @@ export default {
           value.people <= this.adult &&
           value.people_end >= this.adult
         ) {
-          this.totalAdult = this.adult * value.price;
+          this.totalAdult = parseFloat(this.adult * value.price).toFixed(2);
         }
       });
 
@@ -171,7 +171,7 @@ export default {
           value.people <= this.child &&
           value.people_end >= this.child
         ) {
-          this.totalChild = this.child * value.price;
+          this.totalChild = parseFloat(this.child * value.price).toFixed(2);
         }
       });
 
