@@ -70,6 +70,11 @@ export const actions = {
 
       commit("SET_ID", res.data.id);
     } catch (e) {
+      alert("There an issue, please contact us directly\n" +
+        "Office: +62361 908 2834\n" +
+        "WhatsApp: +6281 237 205 332\n" +
+        "Email: tour@hirebalidriver.com\n" +
+        "Address: Jln. Batu Kurung II no. 110, Bunutan, Ubud, Gianyar, Bali");
       console.log("error", e);
     }
   },
