@@ -3,7 +3,7 @@ name: Auto Deploy to DigitalOcean
 on:
   push:
     branches:
-      - master_do
+      - main
 
 jobs:
   deploy:
