@@ -1,4 +1,6 @@
-name: Auto Deploy to DigitalOcean
+# .github/workflows/main.yml
+
+name: Build, Push, and Deploy to DigitalOcean
 
 on:
   push:
@@ -6,46 +8,51 @@ on:
       - main
 
 jobs:
-  deploy:
+  build-push-deploy:
     runs-on: ubuntu-latest
 
     steps:
     - name: Checkout Code
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4 # Versi lebih baru
 
-    - name: Build Docker Image
-      run: |
-        docker build --no-cache -t kapamungkas/booking-hbd:latest .
+    - name: Login to Docker Hub
+      uses: docker/login-action@v3
+      with:
+        username: ${{ secrets.DOCKER_HUB_USERNAME }}
+        password: ${{ secrets.DOCKER_HUB_TOKEN }}
 
-    - name: Push Docker Image to Docker Hub
-      env:
-        DOCKER_HUB_USERNAME: ${{ secrets.DOCKER_HUB_USERNAME }}
-        DOCKER_HUB_TOKEN: ${{ secrets.DOCKER_HUB_TOKEN }}
-      run: |
-        echo "$DOCKER_HUB_TOKEN" | docker login -u "$DOCKER_HUB_USERNAME" --password-stdin
-        docker push kapamungkas/booking-hbd:latest
+    # Menggabungkan langkah Build dan Push menjadi satu untuk efisiensi
+    - name: Build and push Docker image
+      uses: docker/build-push-action@v5
+      with:
+        context: .
+        push: true
+        tags: kapamungkas/booking-hbd:latest
+        # --- INI ADALAH PERBAIKAN PALING PENTING ---
+        # Mengirim URL API dari GitHub Secrets ke Dockerfile saat build
+        build-args: |
+          NUXT_BASE_URL=${{ secrets.NUXT_BASE_URL }} # Pastikan nama secret ini ada di repo Anda
 
     - name: Deploy to DigitalOcean
-      uses: appleboy/ssh-action@v0.1.8
+      uses: appleboy/ssh-action@v1.0.3 # Versi lebih baru
       with:
         host: ${{ secrets.DO_SERVER_IP }}
         username: root
         key: ${{ secrets.DO_SSH_KEY }}
+        # --- SCRIPT DEPLOY YANG SUDAH DIPERBAIKI ---
         script: |
-                # Hentikan dan hapus semua container yang berjalan
-                docker-compose down
+          # Arahkan ke direktori project
+          cd /root/bookinghirebalidriver
 
-                # Hapus semua container (termasuk yang berhenti)
-                docker rm -f $(docker ps -a -q) || true
-                
-                # Hapus semua images (termasuk image lokal yang sudah ada)
-                docker rmi -f $(docker images -q) || true
-                
-                # Arahkan ke direktori project
-                cd /root/bookinghirebalidriver
+          # Tarik versi image terbaru dari Docker Hub
+          # Perintah ini akan melihat 'image: kapamungkas/booking-hbd:latest' di docker-compose.yml
+          # dan mengunduh versi terbarunya.
+          docker-compose pull
 
-                # Tarik ulang image dari Docker Hub
-                docker pull kapamungkas/booking-hbd:latest
+          # Restart container menggunakan image yang baru ditarik
+          # --force-recreate memastikan container dibuat ulang dengan image baru
+          # Kita HAPUS '--build' karena image sudah jadi dari CI/CD
+          docker-compose up -d --force-recreate
 
-                # Gunakan docker-compose untuk membangun dan menjalankan container baru dengan image yang sudah di-pull
-                docker-compose up -d --force-recreate --build
+          # (Opsional tapi direkomendasikan) Bersihkan image lama yang tidak terpakai
+          docker image prune -a -f

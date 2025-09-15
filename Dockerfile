@@ -14,6 +14,14 @@ RUN yarn install --frozen-lockfile
 # Salin seluruh isi proyek ke dalam kontainer
 COPY . .
 
+# --- TAMBAHKAN BAGIAN INI ---
+# Deklarasikan argument yang bisa diterima saat build
+ARG NUXT_BASE_URL
+
+# Set environment variable dari argument yang diterima
+# Variabel ini akan dibaca oleh nuxt.config.js saat "yarn build"
+ENV NUXT_BASE_URL=$NUXT_BASE_URL
+
 # Build aplikasi Nuxt.js untuk produksi
 RUN yarn build
 

@@ -4,5 +4,7 @@ services:
     image: kapamungkas/booking-hbd:latest
     container_name: booking-hbd
     ports:
-      - "3000:80" # Changed host port from 8080 to 8081 as an example
+      - "80:3000" # Changed host port from 8080 to 8081 as an example
     restart: always
+    environment:
+      - NUXT_BASE_URL=http://128.199.177.98
