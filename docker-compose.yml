@@ -1,0 +1,19 @@
+version: '3.8'
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - '3000:3000' # Host port 8000 dipetakan ke container port 3000
+    environment:
+      # Variabel lingkungan dari nuxt.config.js
+      # Menggunakan variabel lingkungan dari host jika tersedia, atau default ke http://localhost:8000
+      NUXT_BASE_URL: ${NUXT_BASE_URL:-http://localhost:8000}
+    # volumes:
+      # Optional: Jika Anda ingin live-reloading saat pengembangan, uncomment baris di bawah ini
+      # Namun, untuk produksi, lebih baik tidak menggunakan bind mounts untuk kode aplikasi
+      # - .:/app
+      # - /app/node_modules
+    restart: always # Selalu restart kontainer jika crash atau berhenti
