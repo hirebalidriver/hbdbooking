@@ -2,7 +2,7 @@
   <div class="container px-6 mx-auto">
     <div class="flex justify-between py-5">
       <div class="w-32">
-        <a href="https://hirebalidriver.com"><img src="@/static/image/logo-hbd.png" alt="Hire Bali Driver" /></a>
+        <a href="https://hirebalidriver.com"><img src="@/static/image/hbd-logo-edited.jpg" alt="Hire Bali Driver" /></a>
       </div>
       <a href="https://hirebalidriver.com">Home</a>
     </div>
