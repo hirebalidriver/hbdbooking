@@ -31,7 +31,7 @@ jobs:
         # --- INI ADALAH PERBAIKAN PALING PENTING ---
         # Mengirim URL API dari GitHub Secrets ke Dockerfile saat build
         build-args: |
-          NUXT_BASE_URL=${{ secrets.NUXT_BASE_URL }} # Pastikan nama secret ini ada di repo Anda
+          NUXT_BASE_URL=${{ secrets.NUXT_BASE_URL }}
 
     - name: Deploy to DigitalOcean
       uses: appleboy/ssh-action@v1.0.3 # Versi lebih baru
