@@ -5,7 +5,7 @@ name: Build, Push, and Deploy to Dev Environment
 on:
   push:
     branches:
-      - develop  # Gunakan branch develop untuk deploy ke environment dev
+      - dev  # Gunakan branch develop untuk deploy ke environment dev
 
 jobs:
   build-push-deploy:
