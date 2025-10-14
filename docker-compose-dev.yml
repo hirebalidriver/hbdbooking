@@ -1,0 +1,20 @@
+version: '3.8'
+
+services:
+  app:
+    image: kapamungkas/booking-hbd:dev-latest
+    container_name: hbd-booking-dev
+    restart: unless-stopped
+    env_file:
+      - .env
+    environment:
+      - NODE_ENV=production
+      - PORT=3001
+    ports:
+      - "3001:3001"
+    networks:
+      - hbd-network
+
+networks:
+  hbd-network:
+    driver: bridge

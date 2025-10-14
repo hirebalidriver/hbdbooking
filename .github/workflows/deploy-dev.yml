@@ -1,0 +1,64 @@
+# .github/workflows/deploy-dev.yml
+
+name: Build, Push, and Deploy to Dev Environment
+
+on:
+  push:
+    branches:
+      - develop  # Gunakan branch develop untuk deploy ke environment dev
+
+jobs:
+  build-push-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout Code
+      uses: actions/checkout@v4 # Versi lebih baru
+
+    - name: Login to Docker Hub
+      uses: docker/login-action@v3
+      with:
+        username: ${{ secrets.DOCKER_HUB_USERNAME }}
+        password: ${{ secrets.DOCKER_HUB_TOKEN }}
+
+    # Menggabungkan langkah Build dan Push menjadi satu untuk efisiensi
+    - name: Build and push Docker image
+      uses: docker/build-push-action@v5
+      with:
+        context: .
+        push: true
+        tags: kapamungkas/booking-hbd:dev-latest
+        # --- INI ADALAH PERBAIKAN PALING PENTING ---
+        # Mengirim URL API dari GitHub Secrets ke Dockerfile saat build
+        build-args: |
+          NUXT_BASE_URL=${{ secrets.NUXT_BASE_URL_DEV }}
+
+    - name: Deploy to Dev Server
+      uses: appleboy/ssh-action@v1.0.3 # Versi lebih baru
+      with:
+        host: ${{ secrets.DO_SERVER_IP_DEV }}
+        username: root
+        key: ${{ secrets.DO_SSH_KEY_DEV }}
+        # --- SCRIPT DEPLOY YANG SUDAH DIPERBAIKI ---
+        script: |
+          # Arahkan ke direktori project
+          cd /root/bookinghirebalidriver-dev
+
+          # Buat file .env jika belum ada
+          if [ ! -f .env ]; then
+            echo "PORT=3001" > .env
+            echo "NUXT_BASE_URL=${{ secrets.NUXT_BASE_URL_DEV }}" >> .env
+          fi
+
+          # Tarik versi image terbaru dari Docker Hub
+          # Perintah ini akan melihat 'image: kapamungkas/booking-hbd:dev-latest' di docker-compose-dev.yml
+          # dan mengunduh versi terbarunya.
+          docker-compose -f docker-compose-dev.yml pull
+
+          # Restart container menggunakan image yang baru ditarik
+          # --force-recreate memastikan container dibuat ulang dengan image baru
+          # Kita HAPUS '--build' karena image sudah jadi dari CI/CD
+          docker-compose -f docker-compose-dev.yml up -d --force-recreate
+
+          # (Opsional tapi direkomendasikan) Bersihkan image lama yang tidak terpakai
+          docker image prune -a -f

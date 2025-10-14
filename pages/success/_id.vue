@@ -41,18 +41,18 @@
               <tbody>
                 <tr>
                   <td>Adult</td>
-                  <td>{{ booking.adult }} x USD {{ booking.adult_price }}</td>
-                  <td>USD {{ booking.adult * booking.adult_price }}</td>
+                  <td>{{ booking.adult }} x {{ $formatIDR(booking.idr_adult_price || $convertToIDR(booking.adult_price)) }}</td>
+                  <td>{{ $formatIDR(booking.adult * (booking.idr_adult_price || $convertToIDR(booking.adult_price))) }}</td>
                 </tr>
                 <tr v-if="booking.child != 0">
                   <td>Child</td>
-                  <td>{{ booking.child }} x USD {{ booking.child_price }}</td>
-                  <td>USD {{ booking.child * booking.child_price }}</td>
+                  <td>{{ booking.child }} x {{ $formatIDR(booking.idr_child_price || $convertToIDR(booking.child_price)) }}</td>
+                  <td>{{ $formatIDR(booking.child * (booking.idr_child_price || $convertToIDR(booking.child_price))) }}</td>
                 </tr>
 
                 <tr>
                   <td colspan="2">Total</td>
-                  <td>USD {{ booking.price }}</td>
+                  <td>{{ $formatIDR(booking.idr_price || $convertToIDR(booking.price)) }}</td>
                 </tr>
               </tbody>
             </table>

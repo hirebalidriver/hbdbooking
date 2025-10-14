@@ -363,8 +363,9 @@ export default {
     },
 
     getTotal() {
-      let priceAdult = this.wishlist?.adult * this.priceAdult?.price;
-      let priceChild = this.wishlist?.child * this.priceChild?.price;
+      // Calculate using IDR prices if available, otherwise use USD with conversion
+      let priceAdult = this.wishlist?.adult * (this.priceAdult?.idr_price || this.$convertToIDR(this.priceAdult?.price));
+      let priceChild = this.wishlist?.child * (this.priceChild?.idr_price || this.$convertToIDR(this.priceChild?.price));
       let total = priceAdult + priceChild;
       this.total = total;
       console.log("total: ", this.total);
@@ -464,6 +465,12 @@ export default {
       this.isPaymentAmountModalVisible = false;
     },
     setLoaded: function () {
+      // Calculate the actual USD value for PayPal processing
+      // Using original USD prices for payment processing, not the converted IDR
+      let priceAdultUSD = this.wishlist?.adult * (this.priceAdult?.price || 0);
+      let priceChildUSD = this.wishlist?.child * (this.priceChild?.price || 0);
+      let totalUSD = parseFloat(priceAdultUSD + priceChildUSD).toFixed(2);
+      
       window.paypal
         .Buttons({
           style: {
@@ -478,7 +485,8 @@ export default {
               purchase_units: [
                 {
                   amount: {
-                    value: this.total,
+                    value: totalUSD,
+                    currency_code: 'USD'
                   },
                 },
               ],

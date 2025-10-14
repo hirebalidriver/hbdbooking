@@ -42,7 +42,7 @@
           </div>
         </div>
         <div class="w-full px-6 py-6 text-right">
-          <p class="text-lg font-bold">USD {{ getTot }}</p>
+          <p class="text-lg font-bold">{{ $formatIDR(getTotIDR) }}</p>
           <div class="mb-1" v-for="(item, index) in prices" :key="index">
             <div
               v-if="
@@ -52,8 +52,7 @@
               "
             >
               <p>
-                {{ adult }} adult x USD {{ item.price }} = USD
-                {{ totalAdult }}
+                {{ adult }} adult x {{ $formatIDR(item.idr_price || $convertToIDR(item.price)) }} = {{ $formatIDR(adult * (item.idr_price || $convertToIDR(item.price))) }}
               </p>
             </div>
           </div>
@@ -67,8 +66,7 @@
                 "
               >
                 <p>
-                  {{ child }} child x USD {{ item.price }} = USD
-                  {{ totalChild }}
+                  {{ child }} child x {{ $formatIDR(item.idr_price || $convertToIDR(item.price)) }} = {{ $formatIDR(child * (item.idr_price || $convertToIDR(item.price))) }}
                 </p>
               </div>
             </div>
@@ -181,6 +179,37 @@ export default {
       console.log(this.totalChild)
 
       return (parseFloat(this.totalAdult) + parseFloat(this.totalChild)).toFixed(2);
+    },
+
+    getTotIDR() {
+      let totalAdultIDR = 0;
+      let totalChildIDR = 0;
+
+      this.prices.forEach((value, index) => {
+        if (
+          value.type == 1 &&
+          value.people <= this.adult &&
+          value.people_end >= this.adult
+        ) {
+          // Use idr_price if available, otherwise convert using current exchange rate
+          const price = value.idr_price !== undefined ? value.idr_price : this.$convertToIDR(value.price);
+          totalAdultIDR = this.adult * price;
+        }
+      });
+
+      this.prices.forEach((value, index) => {
+        if (
+          value.type == 2 &&
+          value.people <= this.child &&
+          value.people_end >= this.child
+        ) {
+          // Use idr_price if available, otherwise convert using current exchange rate
+          const price = value.idr_price !== undefined ? value.idr_price : this.$convertToIDR(value.price);
+          totalChildIDR = this.child * price;
+        }
+      });
+
+      return totalAdultIDR + totalChildIDR;
     },
   },
 
