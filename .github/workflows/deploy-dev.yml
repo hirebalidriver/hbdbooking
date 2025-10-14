@@ -31,14 +31,14 @@ jobs:
         # --- INI ADALAH PERBAIKAN PALING PENTING ---
         # Mengirim URL API dari GitHub Secrets ke Dockerfile saat build
         build-args: |
-          NUXT_BASE_URL=${{ secrets.NUXT_BASE_URL_DEV }}
+          NUXT_BASE_URL=${{ secrets.NUXT_BASE_URL }}
 
     - name: Deploy to Dev Server
       uses: appleboy/ssh-action@v1.0.3 # Versi lebih baru
       with:
-        host: ${{ secrets.DO_SERVER_IP_DEV }}
+        host: ${{ secrets.DO_SERVER_IP }}
         username: root
-        key: ${{ secrets.DO_SSH_KEY_DEV }}
+        key: ${{ secrets.DO_SSH_KEY }}
         # --- SCRIPT DEPLOY YANG SUDAH DIPERBAIKI ---
         script: |
           # Arahkan ke direktori project
@@ -47,7 +47,7 @@ jobs:
           # Buat file .env jika belum ada
           if [ ! -f .env ]; then
             echo "PORT=3001" > .env
-            echo "NUXT_BASE_URL=${{ secrets.NUXT_BASE_URL_DEV }}" >> .env
+            echo "NUXT_BASE_URL=${{ secrets.NUXT_BASE_URL }}" >> .env
           fi
 
           # Tarik versi image terbaru dari Docker Hub
